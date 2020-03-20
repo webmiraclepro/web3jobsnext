@@ -68,7 +68,7 @@ const Navbar = ({ logo }: any) => {
             <Link href="/">
 
               <a onClick={() => setOpenNav(false)} className="flex pl-2.5 pt-6 text-fsl font-bold transition-all hover:text-navhover">
-                WEBSITE
+                LAUNCHPAD
                 <img src={websiteIcon} className="ml-1" />
               </a>
             </Link>
@@ -83,15 +83,15 @@ const Navbar = ({ logo }: any) => {
             <a className="flex items-center pl-12">
               <img className="h-4/5 w-4/5" src={logo} alt="logo" />
               <div className="flex flex-col justify-center items-center pl-2.5">
-                <div id="staking-nav-brand-title" className="text-xxxxl font-bold">Illogics</div>
-                <div id="staking-nav-brand-subtitle" className="text-fsl font-bold">Ecosystem</div>
+                <div id="staking-nav-brand-title" className="text-xxxxl font-bold">VOID</div>
+                <div id="staking-nav-brand-subtitle" className="text-fsl font-bold">Presale</div>
               </div>
             </a>
           </Link>
           <Link href="#staking">
             <a className="flex text-xl font-body transition-all font-bold hover:text-navhover">
               STAKING HUB
-              <img src={goopIcon} className="w-[25px] pl-1"/>
+              <img src={goopIcon} className="w-[25px] pl-1" />
             </a>
           </Link>
           <Link href="#allow-list">
@@ -102,7 +102,7 @@ const Navbar = ({ logo }: any) => {
           </Link>
           <Link href="/">
             <a className="flex text-xl font-body transition-all font-bold hover:text-navhover">
-              WEBSITE
+              LAUNCHPAD
               <img src={websiteIcon} className="w-[25px] pl-1" />
             </a>
           </Link>

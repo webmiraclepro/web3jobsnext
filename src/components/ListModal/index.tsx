@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import StakeCard from "../StakeCard"
+import StakeCard from "../ReadMore"
 import ReactModal from 'react-modal';
 import StakingContract from '../Web3/StakingContract';
 import { CHAIN_ID } from '../../config';
@@ -41,7 +41,7 @@ const customStyles = {
 
 // ReactModal.setAppElement('#yourAppElement');
 
-const StakeModal = ({ tokenIds, isStake, isUnStake, isClaim, closeModal }: ModalProps) => {
+const ListModal = ({ tokenIds, isStake, isUnStake, isClaim, closeModal }: ModalProps) => {
 
   let action: string;
 
@@ -124,7 +124,6 @@ const StakeModal = ({ tokenIds, isStake, isUnStake, isClaim, closeModal }: Modal
           tokenIds?.map((k: any, index: number) => {
             return (
               <div className="" key={index}>
-                <StakeCard onhandle={handleStakeCard} tokenId={k.token_id} action={action} />
               </div>
             )
           })
@@ -147,4 +146,4 @@ const StakeModal = ({ tokenIds, isStake, isUnStake, isClaim, closeModal }: Modal
   )
 }
 
-export default StakeModal;
+export default ListModal;
