@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import React from 'react';
+import { VictoryPie } from "victory-pie";
 import ListModal from '../ListModal';
 import { useAddress } from '../AddressProvider';
 import { CHAIN_ID } from '../../config';
@@ -177,6 +178,11 @@ const TokenData = () => {
     " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(74, 20, 191)", strokeLinecap: "butt", transition: "stroke-dashoffset 0.5s ease 0s", transform: "rotate(0.99turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "76.969px" }}>
                   </path>
                 </svg>
+                <VictoryPie
+        data={[{y:900}]}
+        colorScale={["rgb(74, 20, 191)"]}
+        radius={100}
+      />
               </div>
               <span className="font-bold">51%</span>
               <span className="font-bold">Liquidity(%)</span>
