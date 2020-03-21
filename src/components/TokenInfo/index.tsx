@@ -1,13 +1,34 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
 import ListModal from '../ListModal';
+import CountdownTimer from './CountdownTimer';
 import { useAddress } from '../AddressProvider';
 import { CHAIN_ID } from '../../config';
 import Link from 'next/link';
 
 const TokenInfo = () => {
+  const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
+  const FOUR_DAYS_IN_MS = 4 * 24 * 60 * 60 * 1000;
+  const NOW_IN_MS = new Date().getTime();
+  const startTime =  NOW_IN_MS + THREE_DAYS_IN_MS;
+  const endTime = NOW_IN_MS + FOUR_DAYS_IN_MS;
+  const curTime =  new Date().getTime();
+
+  const calTargetDate = () => {
+    if(curTime < startTime) {
+      setActiveTitle("starts");
+      setTargetDate(startTime);
+    } else if(curTime >= startTime) {
+      setActiveTitle("ends");
+      setTargetDate(endTime);
+    }
+    
+  }
   const { address } = useAddress();
-  const[isBuyBtn, setIsBuyBtn] = useState(false);
+  const [isBuyBtn, setIsBuyBtn] = useState(false);
+  const [activeTitle, setActiveTitle] = useState("");
+  const [targetDate, setTargetDate] = useState<number>();
+  const [buyValue, setBuyValue] = useState<string>("0");
 
   function openModal() {
     if (address && window.ethereum.chainId === CHAIN_ID) {
@@ -25,31 +46,18 @@ const TokenInfo = () => {
     }
   }, [address])
 
+  useEffect(() => {
+    calTargetDate();
+  },[])
+
   return (
     <div id="tokenInfo-body" className='flex justify-center items-center pt-1 pb-5'>
       <div className="container flex flex-col justify-center items-center w-[90%] lg:w-[79%] max-w-[1000px] mx-auto mt-12">
         <div className='flex flex-col lg:flex-row justify-between'>
 
           <div className="flex flex-col basis-1/4 grow-0 shrink justify-start items-center pb-4 pt-2 mr-0 lg:mr-4">
-            <div className="text-center font-bold text-xxl mb-2">Presale ends in</div>
-            <div className="rounded-[16px] w-full p-2 flex justify-center items-center text-[#8880a6] font-bold text-xxxl">
-              <span className="font-bold text-center text-[#8880a6] mr-2.5 flex flex-col w-[65px] h-[60px] rounded-[14px] items-center justify-center bg-[#f7f6ff] text-xxl">
-                <span>11</span>
-                <span className="text-center text-fsm pb-px">days</span>
-              </span>
-              <span className="font-bold text-center text-[#8880a6] mr-2.5 flex flex-col w-[65px] h-[60px] rounded-[14px] items-center justify-center bg-[#f7f6ff] text-xxl">
-                <span>07</span>
-                <span className="text-center text-fsm pb-px">hrs</span>
-              </span>
-              <div className="font-bold text-center text-[#8880a6] mr-2.5 flex flex-col w-[65px] h-[60px] rounded-[14px] items-center justify-center bg-[#f7f6ff] text-xxl">
-                <span>41</span>
-                <span className="text-center text-fsm pb-px">mnts</span>
-              </div>
-              <div className="font-bold text-center text-[#8880a6] mr-2.5 flex flex-col w-[65px] h-[60px] rounded-[14px] items-center justify-center bg-[#f7f6ff] text-xxl">
-                <span>35</span>
-                <span className="text-center text-fsm pb-px">seconds</span>
-              </div>
-            </div>
+            <div className="text-center font-bold text-xxl mb-2">Presale {activeTitle} in</div>
+            <CountdownTimer targetDate={targetDate} />
             <div className="bg-[#f7f6ff] p-3.5 rounded-[14px] w-full h-[50px] flex justify-between items-center font-bold mt-6">
               <span>Min:0.1 BNB</span>
               <span>Max:2.0 BNB</span>
@@ -58,8 +66,10 @@ const TokenInfo = () => {
               <span>Amount</span>
               <div>
                 <div className="relative flex flex-row w-full">
-                  <input className="w-full py-1 px-3 relative h-[50px] rounded-[33px] bg-white mb-6 font-bold text-fsl shadow-[0px_0px_34px_0px_#0000001c] text-black hover:borer-r border-[#5a34ba]" placeholder="0.0" type="text" value="0" />
-                  <div className="absolute top-[9.6px] right-[13px] bg-[#3914ad] w-[88px] h-[29px] rounded-[66px] justify-center items-center flex cursor-pointer " >
+                  <input className="w-full py-1 px-3 relative h-[50px] rounded-[33px] bg-white mb-6 font-bold text-fsl shadow-[0px_0px_34px_0px_#0000001c] text-black hover:borer-r border-[#5a34ba]"
+                   placeholder="0.0" type="text" value={buyValue} 
+                   onChange={(e)=>{setBuyValue(e.target.value)}}/>
+                  <div className="absolute top-[9.6px] right-[13px] bg-[#3914ad] w-[88px] h-[29px] rounded-[66px] justify-center items-center flex cursor-pointer " onClick={() => {console.log("clicked maximum")}}>
                     <span className="text-white text-fsl">Maximum</span>
                   </div>
                 </div>
