@@ -1,7 +1,27 @@
+
+import { useState, useEffect } from 'react';
+import React from 'react';
+import ListModal from '../ListModal';
+import { useAddress } from '../AddressProvider';
+import { CHAIN_ID } from '../../config';
 import DataItem from "./DataItem";
 import StatusItem from "./StatusItem";
 
 const TokenData = () => {
+  const { address } = useAddress();
+  const [isWhiteBtn, setIsWhiteBtn] = useState(false);
+
+  function openModal() {
+    if (address && window.ethereum.chainId === CHAIN_ID) {
+      console.log("whiteBtn clicked");
+    }
+    setIsWhiteBtn(true);
+  }
+
+  function closeModal() {
+    setIsWhiteBtn(false);
+  }
+
 
   return (
     <div className="flex flex-col lg:flex-row flex-nowrap gap-0 justify-between container w-[90%] lg:w-[79%] max-w-[1000px] mx-auto" >
@@ -26,7 +46,8 @@ const TokenData = () => {
         <DataItem itemTitle="Liquidity Lockup Time" itemValue="30 days" isLink={false} hrefPath="" />
       </div>
       <div className="flex flex-col basis-[30%] grow-0 shrink items-center max-w-full">
-        <button type="button" className="border border-[#5a34ba] mt-4 w-full h-[50px] rounded-[66px] text-[#5a34ba] flex justify-center cursor-pointer items-center" ant-click-animating-without-extra-node="false">
+        <button type="button" className="border border-[#5a34ba] mt-4 w-full h-[50px] rounded-[66px] text-[#5a34ba] flex justify-center cursor-pointer items-center"
+          onClick={openModal}>
           <span>Whitelisted Wallets</span>
         </button>
         <div className="w-full">
@@ -163,6 +184,7 @@ const TokenData = () => {
           </div>
         </div>
       </div>
+      <ListModal isBuyBtn={false} isWhiteBtn={isWhiteBtn} closeModal={closeModal} />
     </div>
   )
 }

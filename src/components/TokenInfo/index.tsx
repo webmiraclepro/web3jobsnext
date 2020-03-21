@@ -7,19 +7,17 @@ import Link from 'next/link';
 
 const TokenInfo = () => {
   const { address } = useAddress();
-  const [isStake, setIsStake] = useState(false);
-  const [isUnStake, setIsUnStake] = useState(false);
-  const [tokenPerBlock, setTokenPerBlock] = useState<String | undefined>(undefined);
-  const [amountNft, setAmountNft] = useState<String | undefined>(undefined);
-  const [tokenIds, setTokenIds] = useState<Array<{}> | undefined>(undefined);
+  const[isBuyBtn, setIsBuyBtn] = useState(false);
 
   function openModal() {
-
+    if (address && window.ethereum.chainId === CHAIN_ID) {
+      console.log("buyBtn clicked");
+    }
+    setIsBuyBtn(true);
   }
 
   function closeModal() {
-    setIsUnStake(false);
-    setIsStake(false);
+    setIsBuyBtn(false);
   }
 
   useEffect(() => {
@@ -68,7 +66,7 @@ const TokenInfo = () => {
                 <p className="text-center -mt-2.5 font-bold"></p>
               </div>
             </div>
-            <div className="h-[50px] rounded-[66px] flex w-full justify-center items-center cursor-pointer mb-4 bg-[#3914ad]" >
+            <div className="h-[50px] rounded-[66px] flex w-full justify-center items-center cursor-pointer mb-4 bg-[#3914ad]" onClick={openModal}>
               <span className="text-center text-white font-bold text-xxxxl">BUY</span>
             </div>
             <div className="flex items-center mt-6">
@@ -103,8 +101,7 @@ const TokenInfo = () => {
           </div>
         </div>
       </div>
-
-      <ListModal tokenIds={tokenIds} isClaim={false} isStake={isStake} isUnStake={isUnStake} closeModal={closeModal} />
+      <ListModal isBuyBtn={isBuyBtn} isWhiteBtn={false} closeModal={closeModal} />
     </div>
   )
 }

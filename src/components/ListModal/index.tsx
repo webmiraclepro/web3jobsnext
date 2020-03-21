@@ -1,16 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
-import StakeCard from "../ReadMore"
 import ReactModal from 'react-modal';
-import StakingContract from '../Web3/StakingContract';
 import { CHAIN_ID } from '../../config';
 
 const close_icon = '/svg/close_icon.svg';
 
 interface ModalProps {
-  tokenIds: Array<{}> | undefined,
-  isStake: boolean,
-  isUnStake: boolean,
-  isClaim: boolean,
+  isBuyBtn: boolean,
+  isWhiteBtn: boolean,
   closeModal: () => void,
 }
 
@@ -21,7 +17,7 @@ const customStyles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)'
+    backgroundColor: 'rgba(126,98,155,.2)'
   },
   content: {
     top: '50%',
@@ -30,9 +26,10 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     border: '1px solid #ccc',
-    background: '#fff',
+    background: 'hsla(0,0%,100%,.4)',
     overflow: 'auto',
-    borderRadius: '4px',
+    borderRadius: '30px',
+    backdropFilter: "blur(10px)",
     outline: 'none',
     padding: '20px',
     transform: 'translate(-50%, -50%)',
@@ -41,107 +38,73 @@ const customStyles = {
 
 // ReactModal.setAppElement('#yourAppElement');
 
-const ListModal = ({ tokenIds, isStake, isUnStake, isClaim, closeModal }: ModalProps) => {
+const ListModal = ({ isBuyBtn, isWhiteBtn, closeModal }: ModalProps) => {
 
-  let action: string;
-
-  const actionText = () => {
-    if (isStake) {
-      action = "stake";
-      return 0;
-    }
-    if (isUnStake) {
-      action = "unStake";
-      return 1;
-    }
-    if (isClaim) {
-      action = "claim";
-      return 2;
-    }
-  }
-  const handleStakeCard = useCallback((action:string, tokenId:string) => {
+  const handleStakeCard = useCallback((action: string, tokenId: string) => {
     console.log("handleStakeCard");
-    if(window.ethereum.chainId !== CHAIN_ID) {
+    if (window.ethereum.chainId !== CHAIN_ID) {
       closeModal();
       return;
-    }
-    const actionVal = actionText();
-    if(actionVal == 0){
-      console.log("stakeNFt");
-      stakeNFT(tokenId)
-
-    }
-    if(actionVal == 1) {
-      console.log("unstakeNFt");
-      unStakeNFT(tokenId);
-    }
-
-    if(actionVal == 2) {
-      console.log("harvest");
-      harvest(tokenId);
     }
     closeModal();
   }, [])
 
-  const stakeNFT = async (stakeTokenId: string) => {
-    const staked = await StakingContract.methods.stakeNFT(Number(stakeTokenId)).call();
-    console.log("staked", staked);
-  }
-
-  const unStakeNFT = async (unStakeTokenId: string) => {
-    const unStaked = await StakingContract.methods.unStakeNFT(Number(unStakeTokenId)).call();
-    console.log("unStaked", unStaked);
-  }
-
-  const harvest = async (harvestTokenId: string) => {
-    const claimed = await StakingContract.methods.harvest(Number(harvestTokenId)).call();
-    console.log("harvest", claimed);
-  }
-
-  const handleAfterOpenFunc = () => {
-    console.log("handleAfterOpen");
-  }
-
-
-  actionText();
-
   return (
     <ReactModal
-      isOpen={isStake ? isStake : isUnStake ? isUnStake : isClaim ? isClaim : false}
-      onAfterOpen={handleAfterOpenFunc}
+      isOpen={isBuyBtn ? isBuyBtn : isWhiteBtn ? isWhiteBtn : false}
       // onRequestClose={closeModal}
       style={customStyles}
       ariaHideApp={false}
     >
-      <div className='flex flex-row items-center justify-between my-2.5'>
-        <div className="font-bold text-xxl">NFT!</div>
-        <button onClick={closeModal}>
-          <img className="w-[30px] h-auto cursor-pointer" src={close_icon} alt="closeIcon" />
-        </button>
-      </div>
-      <div className='flex flex-col space-y-4 justify-center'>
-        {
-          tokenIds?.map((k: any, index: number) => {
-            return (
-              <div className="" key={index}>
-              </div>
-            )
-          })
+      {
+        isBuyBtn &&
+        <div className='flex flex-row items-center justify-between my-2.5'>
+          <div className='flex font-bold text-fsl'>You are not connected!</div>
+          <button onClick={closeModal}>
+            <img className="w-[20px] h-auto cursor-pointer" src={close_icon} alt="closeIcon" />
+          </button>
+        </div>
+      }
+      {
+        isWhiteBtn &&
+        <div className='flex flex-col items-center justify-between my-2.5'>
+          <div className="flex items-center justify-between p-2 rounded-[60px] w-[800px]">
 
-        }
-        {
-          !tokenIds && isStake && 
-          <div className='flex font-bold text-xl'>NO NFTS TO STAKE!</div>
-        }
-         {
-          !tokenIds && isUnStake && 
-          <div className='inline-flex font-bold text-xl'>NO NFTS TO UNSTAKE!</div>
-        }
-        {
-          !tokenIds && isClaim &&
-          <div className='flex font-bold text-xl'>NO TOKENS TO CLAIM!</div>
-        }
-      </div>
+            <form className="text-fsl">
+              <span className="text-[#483c6b] font-semibold">Search in whitelist wallets</span>
+            </form>
+            <button onClick={closeModal}>
+              <img className="w-[20px] h-auto cursor-pointer" src={close_icon} alt="closeIcon" />
+            </button>
+          </div>
+          <div className="container mb-4">
+            <div className="flex flex-col justify-center">
+              <div className="p-3">
+                <div className="w-full flex items-center">
+                    <input type="text" className="w-full rounded-[48px] px-4 h-[52px] text-[#360cae] bg-[#f0f0f0]" placeholder="Search" value="" />
+                </div>
+              </div>
+              <div className="w-full p-0">
+                <div className="h-[300px] overflow-y-scroll">
+                  <table className="flex flex-col justify-center items-center text-sm mb-0" >
+                    <thead className='flex w-full'>
+                      <tr className="w-full flex justify-center space-x-8"><th className='w-[10%]'>No</th><th className='w-[90%]'>Address (0) </th></tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <a download="Report.csv" className="cursor-pointer flex justify-center items-center mt-4" target="_self" href="blob:https://cookiesale.io/92a6b76a-f4e8-4d9f-959c-d7d1bc9a50ef">
+                  <button type="button" className="w-[30%] h-[35px] bg-[#3914ad] text-white rounded-[66px] font-semibold flex justify-center items-center">
+                    <span>Export as CSV</span>
+                  </button>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      }
+
     </ReactModal>
   )
 }
