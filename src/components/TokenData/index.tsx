@@ -1,16 +1,50 @@
 
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { VictoryPie } from "victory-pie";
+import { DonutChart } from 'react-circle-chart'
+import { PieChart } from 'react-minimal-pie-chart';
 import ListModal from '../ListModal';
 import { useAddress } from '../AddressProvider';
 import { CHAIN_ID } from '../../config';
 import DataItem from "./DataItem";
 import StatusItem from "./StatusItem";
+import RadialChart from './RadialChart';
 
 const TokenData = () => {
   const { address } = useAddress();
   const [isWhiteBtn, setIsWhiteBtn] = useState(false);
+  const [liquidity, setLiquidity] = useState(0);
+  const [burnt, setBurnt] = useState(0);
+  const [unlocked, setUnlocked] = useState(0);
+  const [presale, setPresale] = useState(0);
+  const [bnb, setBnb] = useState(0);
+
+  const chartLiquidity = [
+    { title: 'liquidity', value: liquidity, color: 'rgb(74, 20, 191)' }
+
+  ]
+
+  const chartBurnt = [
+    { title: 'burnt', value: burnt, color: 'rgb(74, 20, 191)' },
+
+  ]
+
+  const chartUnlocked = [
+    { title: 'unlocked', value: unlocked, color: 'rgb(74, 20, 191)' },
+
+  ]
+
+  const chartPresale = [
+    { title: 'presale', value: presale, color: 'rgb(74, 20, 191)' },
+
+  ]
+
+  const myValue = 90;
+  const myDonutData = [{
+    value: bnb,
+    label: "BNB",
+    color: "rgb(89, 192, 76)",
+  }]
 
   function openModal() {
     if (address && window.ethereum.chainId === CHAIN_ID) {
@@ -22,6 +56,14 @@ const TokenData = () => {
   function closeModal() {
     setIsWhiteBtn(false);
   }
+
+  useEffect(() => {
+    setLiquidity(51);
+    setBnb(60);
+    setBurnt(0.00);
+    setUnlocked(16.14);
+    setPresale(26.67);
+  }, [])
 
 
   return (
@@ -54,25 +96,7 @@ const TokenData = () => {
         <div className="w-full">
           <div className="flex flex-col justify-center items-center mt-8">
             <div className="rounded-[50%] w-[188px]">
-              <svg viewBox="0 0 100 100" data-test-id="CircularProgressbar">
-                <path d="
-      M 50,50
-      m 0,-46
-      a 46,46 0 1 1 0,92
-      a 46,46 0 1 1 0,-92
-    " stroke-width="8" fill-opacity="0" style={{ stroke: "rgb(244, 244, 244)", strokeLinecap: "round", transform: "rotate(0.25turn)", transformOrigin: "center center", strokeDasharray: "289.027px, 289.027px", strokeDashoffset: "0px" }}>
-                </path>
-                <path d="
-      M 50,50
-      m 0,-46
-      a 46,46 0 1 1 0,92
-      a 46,46 0 1 1 0,-92
-    " stroke-width="8" fill-opacity="0" style={{ stroke: "rgb(89, 192, 76)", strokeLinecap: "round", transition: "stroke-dashoffset 0.5s ease 0s", transform: "rotate(0.99turn)", transformOrigin: "center center", strokeDasharray: "289.027px, 289.027px", strokeDashoffset: "289.027px" }}>
-                </path>
-                <text x="50" y="50" style={{ fontFamily: "Manrope", fontSize: "21.6px", fontWeight: "800", letterSpacing: "-1.36px", fill: "rgb(89, 192, 76)", dominantBaseline: "middle", textAnchor: "middle" }}>
-                  0.0 %
-                </text>
-              </svg>
+              <DonutChart roundedCaps={true} items={myDonutData} size={200} trackWidth={"sm"} trackColor={"rgb(244, 244, 244)"} totalFontSize={"22px"} />
             </div>
             <span className="text-center mt-8 text-xxxl font-bold text-[#4a3b6e]">0.0 BNB</span>
             <span className="text-center mb-9 text-xxxl font-bold text-[#8880a6]">
@@ -90,103 +114,12 @@ const TokenData = () => {
         <div className="flex flex-col mt-8 w-full">
           <h3 className="font-extrabold text-[#483c6b] mb-4 text-xl">Token metrics</h3>
           <div className="flex justify-between mb-12">
-            <div className="flex flex-col w-[30%] justify-center items-center">
-              <div className="rotate-[4deg]">
-                <svg className="w-full " viewBox="0 0 100 100" data-test-id="CircularProgressbar">
-                  <circle fill="#d6d6d6" cx="50" cy="50" r="50"></circle>
-                  <path className="CircularProgressbar-trail" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(248, 248, 249)", strokeLinecap: "round", transform: "rotate(0.25turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "0px" }}></path><path className="CircularProgressbar-path" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(74, 20, 191)", strokeLinecap: "butt", transition: "stroke-dashoffset 0.5s ease 0s", transform: "rotate(0.99turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "157.08px" }}>
-                  </path>
-                </svg>
-              </div>
-              <span className="font-bold">0.00%</span>
-              <span className="font-bold">Burnt</span>
-            </div>
-            <div className="flex flex-col w-[30%] justify-center items-center">
-              <div className="rotate-[4deg]">
-                <svg className="w-full " viewBox="0 0 100 100" data-test-id="CircularProgressbar">
-                  <circle fill="#d6d6d6" cx="50" cy="50" r="50"></circle>
-                  <path className="CircularProgressbar-trail" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(248, 248, 249)", strokeLinecap: "round", transform: "rotate(0.25turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "0px" }}>
-                  </path>
-                  <path className="CircularProgressbar-path" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(74, 20, 191)", strokeLinecap: "butt", transition: "stroke-dashoffset 0.5s ease 0s", transform: "rotate(0.99turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "131.722px" }}>
-                  </path>
-                </svg>
-              </div>
-              <span className="font-bold">16.14%</span>
-              <span className="font-bold">Unlocked</span>
-            </div>
-            <div className="flex flex-col w-[30%] justify-center items-center">
-              <div className="rotate-[4deg]">
-                <svg className="w-full " viewBox="0 0 100 100" data-test-id="CircularProgressbar">
-                  <circle fill="#d6d6d6" cx="50" cy="50" r="50"></circle>
-                  <path className="CircularProgressbar-trail" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(248, 248, 249)", strokeLinecap: "round", transform: "rotate(0.25turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: " 0px" }}>
-                  </path>
-                  <path className="CircularProgressbar-path" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(74, 20, 191)", strokeLinecap: "butt", transition: " stroke-dashoffset 0.5s ease 0s", transform: "rotate(0.99turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "115.192px" }}>
-                  </path>
-                </svg>
-              </div>
-              <span className="font-bold">26.67%</span>
-              <span className="font-bold">Presale</span>
-            </div>
+            <RadialChart data={chartBurnt} value={burnt} title={"Burnt"}/>
+            <RadialChart data={chartUnlocked} value={unlocked} title={"Unlocked"}/>
+            <RadialChart data={chartPresale} value={presale} title={"Presale"}/>
           </div>
           <div className="flex justify-center items-center">
-            <div className="flex flex-col w-[30%] justify-center items-center">
-              <div className="rotate-[4deg]">
-                <svg className="w-full " viewBox="0 0 100 100" data-test-id="CircularProgressbar">
-                  <circle fill="#d6d6d6" cx="50" cy="50" r="50"></circle>
-                  <path className="CircularProgressbar-trail" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(248, 248, 249)", strokeLinecap: "round", transform: "rotate(0.25turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "0px" }}>
-                  </path>
-                  <path className="CircularProgressbar-path" d="
-      M 50,50
-      m 0,-25
-      a 25,25 0 1 1 0,50
-      a 25,25 0 1 1 0,-50
-    " stroke-width="50" fill-opacity="0" style={{ stroke: "rgb(74, 20, 191)", strokeLinecap: "butt", transition: "stroke-dashoffset 0.5s ease 0s", transform: "rotate(0.99turn)", transformOrigin: "center center", strokeDasharray: "157.08px, 157.08px", strokeDashoffset: "76.969px" }}>
-                  </path>
-                </svg>
-                <VictoryPie
-        data={[{y:900}]}
-        colorScale={["rgb(74, 20, 191)"]}
-        radius={100}
-      />
-              </div>
-              <span className="font-bold">51%</span>
-              <span className="font-bold">Liquidity(%)</span>
-            </div>
+            <RadialChart data={chartLiquidity} value={liquidity} title={"Liquidity(%)"}/>
           </div>
         </div>
       </div>
