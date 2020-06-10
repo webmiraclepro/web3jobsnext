@@ -1,21 +1,8 @@
-import NavBar from '../components/Navbar';
-import TokenInfo from '../components/TokenInfo';
-import ReadMore from '../components/ReadMore';
-import TokenData from '../components/TokenData';
-import AddressProvider from '../components/AddressProvider';
-
-const logo = "/images/illogiclogo.png";
+import HomePage from "./home"
 
 const Home = () => {
   return (
-    <AddressProvider>
-      <div className='flex flex-col'>
-        <NavBar logo={logo} />
-        <TokenInfo />
-        <ReadMore />        
-        <TokenData />
-      </div>
-    </AddressProvider>
+    <HomePage />
   )
 }
 
